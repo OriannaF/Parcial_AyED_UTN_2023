@@ -1,0 +1,141 @@
+La secuencia viene así:
+NombreEstadio%Capacidad#TipoReservaRazonSocial%AsientosReservados_TipoReservaRazonSocial%AsientosReservados_@ 
+NombreEstadio#TipoReservaRazonSocial%AsientosReservados_TipoReservaRazonSocial%AsientosReservados_@
+
+NombreEstadio: cantidad de caracteres indefinida, indica el nombre.
+Capacidad: dos caracteres que indican capacidad de espectadores en miles
+TipoReserva: 1 caracter que indica quien realiza la reserva, posibles valores:
+        E(Empresa)  -  P(particular) - Y(Protocolo)
+RazonSocial: nombre de quien realiza la reserva
+AsientosReservados: cantidad de caracteres indefinida, teniendo en cuenta la siquiente estructura:
+    - 3 caracteres con el formato CAA: C indica la zona (A...Z) y AA num de asiento (dos caracteres)
+
+El algoritmo debe permitir:
+1) Informar, para cada estadio:
+    a) cantidad total de reservas
+    b) porcentaje de ocupacion
+2) Generar una secuencia de salida que contenfa el nombre de cada estadio y todos los asientos reservados para un tipo
+de reserva particular (que ingresa el usuario). Separar las reservas realizadas para cada estadio por el caracter '@'
+Modelo de salida:
+    NombreEstadio%AsientosReservados@NombreEstadio%AsientosReservados@...@FDS
+
+
+
+Accion Ejercicio1 es
+Ambiente
+
+//variables
+contadorReservas : N(10)
+NombreEstadio : caracter
+
+    //para contar reservas
+    Procedimiento AvzArroba() 
+        Algoritmo
+        Repetir
+            Avz(sec,v)
+        Hasta v = @ 
+    fp;
+
+    //para porcentaje de ocupacion
+
+    Procedimiento AvzProcentaje()
+        Algoritmo
+        Repetir
+            Avz(sec,v)
+        Hasta v = %
+    fp;
+
+
+    Funcion Capacidad(v: caracter) capacidad: N(5)
+        Ambiente
+            capacidad : N(5)
+            Dig1 , Dig2 : N(5)
+        Algoritmo
+            //ej. en capacidad está 4 y 5
+            Avz(sec, v)
+            MapeoCaracterToNumerico(v) 
+            Dig1 := v * 10.000 //4 * 10.000 = 40.000
+            Avz(sec, v)
+            MapeoCaracterToNumerico(v)
+            Dig2 := v * 1000 //5 * 1000 = 5000
+            capacidad := Dig1 + Dig2 // 40.000 + 5.000 = 45.000
+    ff;
+
+    Funcion MapeoCaracterToNumerico(variable: caracter) resultado : numerico
+        Ambiente
+            variable: caracter
+            resultado: N(10)
+        Algoritmo
+            Según variable hacer
+                "1" : 1
+                 ...
+                "99" : 99
+            fs; 
+    ff;
+
+    Procedimiento AvzNumeral()
+        Algoritmo
+        Repetir
+            Avz(sec,v)
+        Hasta v = #
+    fp;
+
+    
+    Algoritmo
+
+    Arr(sec) ; Avz(sec , v)
+    Crear(secSalida) ; Arr(secSalida) ; Avz(secSalida , s)
+
+    contadorReservas := 0
+
+    Mientras v <> @ Hacer
+
+        NombreEstadio := v
+        Avz(NombreEstadio, secSalida)
+        Avz(sec , v)
+
+        Si v = %
+            Capacidad()
+        fs;
+
+        Si v = #
+            Avz(sec,v)
+            Segun v hacer
+                "E" : contadorEmpresa := contadorEmpresa + 1 
+                "P" : contadorParticular := contadorParticular + 1 
+                "Y" : contadorProtocolo := contadorProtocolo + 1
+            fs;
+        fs;
+
+
+        Esc("Ingrese el tipo de reserva particular")
+        Leer(tipo)
+
+        Segun tipo hacer
+            "E" : 
+            Avz(%, secSalida)
+            Avz(contadorEmpresa, secSalida)
+            Avz(@, secSalida)
+
+            "P" : 
+            Avz(%, secSalida)
+            Avz(contadorParticular, secSalida)
+            Avz(@, secSalida)
+
+            "Y" : 
+            Avz(%, secSalida)
+            Avz(contadorProtocolo, secSalida)
+            Avz(@, secSalida)
+        fs;
+
+        //consigna a)
+        AvzArroba()
+        contadorReservas := contadorReservas + 1 
+        //consigna b)
+        ocupacion := ( ( contadorReservas ) / ( capacidad ) ) * 100
+    fm;
+
+
+
+
+

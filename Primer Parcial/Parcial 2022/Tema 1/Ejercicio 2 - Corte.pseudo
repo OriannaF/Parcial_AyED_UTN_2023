@@ -1,0 +1,75 @@
+Accion Ejercicio2 es
+Ambiente
+
+    hoteles = registro
+        codigo_cadena: AN(15)
+        nivel_hotel: (1...5)
+        codigo_hotel: N(4)
+        nombre_hotel: AN(50)
+        es_ciudad_sede:(Booleano)
+        cantidad_habitaciones: N(4)
+    fr;
+
+    arch : archivo de hoteles
+    reg : hoteles
+
+    //consigna b)
+    hotelesSalida = registro
+        codigo_cadena_salida : AN(15)
+        cantidad_habitaciones_salida : N(4)
+    fr
+
+    archSalida : archivo de hotelesSalida
+    regSalida : hotelesSalida
+
+    //resguardos
+    resgCodigo_cadena: AN(15)
+    resgNivel_hotel: (1...5)
+
+    
+    Procedimiento corteNivel()
+        resgCodigo_cadena := reg.codigo_cadena
+        resgNivel_hotel := reg.nivel_hotel
+        contadorNivel := reg.cantidad_habitaciones
+        Esc("En la cadena ", resgCodigo_cadena , ", de nivel ",resgNivel_hotel)
+        Esc("hay ", contadorNivel, "habitaciones.")
+        contadorCadena:= contadorNivel + contadorCadena
+        contadorNivel:= 0
+    fp
+
+    Procedimiento corteCadena()
+        corteNivel()
+        resgCodigo_cadena := reg.codigo_cadena
+        resgNivel_hotel := reg.nivel_hotel
+        Esc("En la cadena ", resgCodigo_cadena , ", de nivel ", resgNivel_hotel)
+        Esc("hay ", contadorCadena, "habitaciones.")
+        contadorCadena := 0
+    fp
+    
+
+Algoritmo
+
+    Abrir(hoteles) ; Leer(hoteles,reg)
+
+    Abrir(hotelesSalida) ; Leer(hotelesSalida, regSalida)
+
+    resgCodigo_cadena := reg.codigo_cadena
+    resgNivel_hotel := reg.nivel_hotel
+
+    contadorTotal := 0
+
+    Mientras NDFA(hoteles) hacer
+
+        Si resgCodigo_cadena <> reg.codigo_cadena entonces
+            corteCadena()
+            Esc(resgCodigo_cadena, hotelesSalida) //guardo nombre en salida
+            Esc(contadorCadena, hotelesSalida) //guardo cantidad_habitaciones en salida
+        Sino
+            Si resgNivel_hotel <> reg.NivelHotel entonces
+                corteNivel()
+            fs
+        fs
+        contadorTotal := contadorTotal + 1
+    fm
+
+

@@ -1,0 +1,124 @@
+// act 1 hago el corte normal, y dsp en el algoritmo evaluo el valor de cantidad de clientes
+// osea que si cant.cleintes mayor a 100 ahi hago los cortes
+// si area = 1 y sucursal facturado mayor a dos millones, emito por pantalla
+
+//act 2 hacer contador, si cantidad cleintes < 10, sumo
+
+//act 3 hay que hacer total facturado de la empresa, y hay que ver si en sucursal 1
+//cuanto porcentaje representa. si es mas o menos que el 20% 
+
+
+
+
+Accion Ejercicio2 es
+Ambiente
+
+    Servicio = registro
+        sucursal : N(4)
+        area : N(1)
+        idServ : N(6)
+        desc : AN(45)
+        cant_cli : N(4)
+        monto : N(6.2)
+    fr
+
+    arch : archivo de Servicio
+    reg : Servicio
+
+    //cortes
+
+    //resguardos
+    resgArea : N(1)
+    resgSucursal : N(4)
+
+    //contadores
+    contadorArea , contadorSucursal , contadorTotal : N(10,2)
+
+    Porcentaje , contadorPocosClientes , contadorSucursalUno : N(10)
+
+
+    Procedimiento corteArea() es
+        resgArea := reg.area
+        contadorArea := reg.monto 
+        Esc("En la sucursal", reg.sucursal ,", del area", reg.area ,"se facturo", contadorArea.)
+        contadorSucursal := contadorArea + contadorSucursal
+        contadorArea := 0
+    fp
+
+
+    Procedimiento corteSucursal() es
+        corteArea()
+        resgSucursal := reg.sucursal
+        Esc("En la sucursal", reg.sucursal ,", del area", reg.area ,"se facturo", contadorArea.)
+        contadorTotal := contadorTotal + contadorSucursal
+        contadorSucursal := 0 
+    fp
+
+
+
+Algoritmo
+
+    Abrir(arch) ; Leer/E(arch, reg)
+
+    //obtener resguardos
+    resgArea := reg.area
+    resgSucursal := reg.sucursal
+
+    //contadores a 0
+
+    //contadores corte
+    contadorArea := 0
+    contadorSucursal := 0
+    contadorTotal := 0
+
+    //otros
+    contadorPocosClientes := 0
+    contadorSucursalUno := 0
+
+    Mientras NFDA(arch) hacer
+
+        //trabajo corte
+
+        Si resgSucursal <> reg.sucursal entonces
+            Si reg.cant_cli > 100 entonces
+                corteSucursal()
+            fs
+        Sino
+            Si resgArea  <> reg.area entonces
+                Si reg.cant_cli > 100 entonces
+                    corteArea()
+                fs
+            fs
+        fs
+
+        //trato registro
+        Si reg.area = 1 Y contadorSucursal > 2000000 entonces
+            Esc("En el area 1, de la sucursal", reg.sucursal, "se facturaron mas de 2 millones")
+        fs
+
+        Si reg.cant_cli < 10 entonces
+            contadorPocosClientes := contadorPocosClientes + 1 
+        fs
+
+        Si reg.sucursal = 1 entonces
+            contadorSucursalUno := contadorSucursalUno + contadorSucursal //para recuperar lo que este en el contador del corte 
+        fs
+
+
+    fm
+
+    corteSucursal()
+
+    Esc("La cantidad de contrataciones que no llegaron a los 10 clientes es de", contadorPocosClientes .)
+    Porcentaje := ((contadorSucursalUno) / (contadorTotal)) * 100
+
+    Si Pocentaje > 20 entonces
+        Esc("El porcentaje de la Sucursal 1 representa mas del 20%, el porcentaje es ", Pocentaje. "%")
+    Sino
+        Esc("El porcentaje de la Sucursal 1 representa menos del 20%, el porcentaje es ", Pocentaje. "%")
+    fs
+    
+
+    Cerrar(Arch)
+
+fa

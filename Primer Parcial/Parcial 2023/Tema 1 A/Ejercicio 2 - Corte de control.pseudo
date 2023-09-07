@@ -1,0 +1,81 @@
+Accion Ejercicio 2 es
+Ambiente
+    //Archivo de entrada
+    ventas = registro
+        provincia : AN(40)
+        ciudad : AN(40)
+        plataforma : AN(40)
+        fecha : N(8) //DD/MM/AAAA
+        entradas : N(10)
+    fr
+    arch = archivo de ventas
+    reg = ventas
+
+    //Archivo de salida
+    archivoSalida = registro
+        provincia : AN(40)
+        ciudad : AN(40)
+        entradas : N(10)
+    fr
+    archSal = archivo de ventas
+    regSal = ventas
+
+    //guardar entrada en salida
+    Procedimiento Guardar()
+        regSal.provincia := reg.Provincia
+        regSal.ciudad := reg.Ciudad
+        regSal.entradas := contadorEntradas
+    fp
+
+    //act 2 fecha
+    fecha : {01042023, 02042023 , ... , 01052023} 
+    //corte
+    resgProvincia, resgCiudad, resgPlataforma : AN(40)
+    
+        
+    contadorEntradas: N(10)
+
+    Procedimiento cortePlataforma()
+        resgPlataforma := reg.plataforma 
+        contadorEntradas := contadorEntradas + reg.entradas
+        contadorEntradas2 := contadorEntradas2 + contadorEntradas
+        Si reg.Fecha en fecha entonces // si está en la fecha estipulada
+            Esc("|" resgCiudad "|" resgPlataforma "|" reg.fecha "|" contadorEntradas "|")
+        fs
+        contadorEntradas := 0
+    fp
+
+    Procedimiento corteCiudad()
+        resgCiudad := reg.Ciudad  
+        Si reg.Fecha en fecha entonces // si está en la fecha estipulada
+            Esc("|" resgCiudad "|" resgPlataforma "|" reg.fecha "|" contadorEntradas2 "|")
+        fs
+        contadorEntradas2 := 0
+    fp
+
+    
+
+    
+Algoritmo
+
+    contadorEntradas := 0
+
+    // encabezado informe act 2
+    Esc("| ciudad | plataforma | fecha | total de ventas |")
+
+    Mientras NDA hacer
+        Si resgCiudad<>reg.Ciudad  entonces
+            corteCiudad()
+            Si contadorEntradas > 1000 entonces
+                Guardar()
+            Fs
+            Sino
+            Si resgPlataforma <> reg.plataforma entonces
+                cortePlataforma()
+            fs	
+        Fs
+        corteCiudad()
+    fm
+
+    
+fa

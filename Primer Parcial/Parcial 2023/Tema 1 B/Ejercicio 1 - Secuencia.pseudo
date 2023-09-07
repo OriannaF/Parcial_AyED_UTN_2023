@@ -1,0 +1,144 @@
+Accion Ejercicio1 es
+    Ambiente
+
+    sec : secuencia de caracter
+    v : caracter
+
+    sec2 : secuencia de caracter
+    v2 : caracter
+
+    Procedimiento avzArtyCod()
+    Ambiente
+        i: N(2)
+    Algoritmo
+        i := 0
+        para i=0 hasta i=5 hacer
+            Avz(sec,v)
+            i:= i + 1 
+        fp 
+    fp
+
+    funcion caracterNumero(x: caracter) ; numerico 
+        Segun x hacer
+            "1" : caracterNumero := 1
+            ... //otros num
+            "9" : caracterNumero := 9 
+        fs
+    ff
+
+    stockSec1 : N(3)
+
+    Procedimiento stockSec1()
+    Algoritmo
+        Avz(sec,v)
+        caracterNumero(v)
+        dig1 := dig1 + v ; dig1 * 100 
+        Avz(sec,v)
+        caracterNumero(v)
+        dig2 := dig2 + v  ; dig2 * 10
+        Avz(sec,v)
+        caracterNumero(v)
+        dig3 := dig3 + v 
+        stockSec1 := dig1 + dig2 + dig3
+    fp
+
+    mes: N(2)
+
+    Procedimiento formaDeEnvioYMes()
+    Ambiente
+        i: N(2)
+        mes1, mes2 : N(2)
+    Algoritmo
+        i := 0
+        Avz(sec2,v2) ; Avz(sec2,v2) ; Avz(sec2,v2)
+        caracterNumero(v2)
+        mes1 := (mes1 + v2) * 10
+         Avz(sec2,v2)
+        caracterNumero(v2)
+        mes2 := (mes1 + v2)
+        mes := mes1 + mes2
+        Avz(sec2,v2) ; Avz(sec2,v2)
+        FE := v2
+    fp
+
+    UV : N(2)
+
+    Procedimiento  unidadesVendidas()
+    Ambiente
+
+        uv1, uv2 : N(2)
+
+    Algoritmo
+
+        Avz(sec2,v2)
+        caracterNumero(v2)
+        uv1 := uv1 + v2 ; uv1 * 10
+
+        Avz(sec2,v2)
+        caracterNumero(v2)
+
+        uv2 := uv2 + v2
+        UV :=  uv1 + uv2
+    fp
+
+    Procedimiento nombreArt()  
+
+        Si stockProd = 0 Y mes = mesInforme entonces 
+
+            Repetir
+                Avz(sec,v)
+                Avz(v,secSalida)
+                Esc(v)
+            Hasta v = &
+            
+        Sino
+            Si mes = mesInforme entonces
+                Repetir
+                    Avz(sec,v)
+                    Esc(v)
+                Hasta v = &
+            fs
+
+            Si stockProd = 0 entonces
+                Repetir
+                    Avz(sec,v)
+                    Avz(v,secSalida)
+                Hasta v = &
+            fs
+
+        fs
+    fp
+
+Algoritmo
+
+    Arr(sec) ; Avz(sec,v)
+    Arr(sec2) ; Avz(sec2,v2)
+    Crear(secSalida) 
+
+    Mientras NFDS(sec) Y NFDS(sec2) hacer
+    
+        avzArtyCod()
+        stockSec1() //obtengo stock secuencia 1
+        formaDeEnvioYMes() //guardo forma de envío y mes
+        unidadesVendidas() // guardo unidades vendidas de secuencia 2
+
+        Si FE = "S" entonces   
+            stockProd := stockSec1 - UV
+            stockSucursal := UV
+        fs
+
+        Si FE = "D"
+            stockEnvio := UV
+        fs
+
+        Esc("Ingrese el mes para el informe")
+        Leer(mesInforme)
+
+        Esc("| Nombre | Cant. Entregadas a Sucursal | Cant. Enviadas a domicilio |")
+
+        Esc("|") ; nombreArt() ; Esc("|")
+        Esc( stockSucursal ) ; Esc("|")
+        Esc( stockEnvio ) ; Esc("|")
+        
+    fm
+fa

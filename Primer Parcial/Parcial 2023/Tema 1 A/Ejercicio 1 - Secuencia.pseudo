@@ -1,0 +1,160 @@
+/* Secuencia Fila_Virtual:
+horafilanumerofilamediopagocantentradas#
+
+Ejemplo:
+0301123456T3#0345234567E4#
+
+Secuencia Compras:
+numerofilanombre_usuario+dninombre.dninombre.dninombre?
+
+Ejemplo:
+123456unsuario+33254787Juan.27895614Melisa.36257489Pedro? */
+
+Accion Ejercicio 1 es
+Ambiente
+
+secCompras , secFila_virtual : secuencia de caracter
+nombre : caracter
+contadorEntrada , cantidadVirtual , declaracionDistinta : numerico
+vC , vF : caracter
+
+// Act A, si  mediopago = "T" entonces  
+// se guarda en secuencia de salida 
+// nombres y los DNI
+
+//para guardar datos
+Procedimiento avzHastaNombre()
+    Ambiente
+        i : numerico
+    Algoritmo
+        Repetir
+            Avz(secCompras,vC)
+            i := i + 1
+        Hasta i = 6 //ya estoy en nombre
+    fa
+fp
+
+Procedimiento guardarNombre() //nombre de usuario
+    Algoritmo
+        avzHastaNombre()
+        Mientras vC <> "+" hacer
+            Avz(secCompras, vC)
+            Avz(vC, nombre)
+        fm
+
+fp
+
+Procedimiento guardarDni()
+    Avz(v,secCompras) //para estar en el primer dígito del dni
+
+    Repetir
+        Avz(secCompras, vC)
+        Avz(vC, dni)
+    Hasta i = 7
+
+    Avz("+" ,  secSalida)
+    contadorEntrada := contadorEntrada + 1
+fp
+
+Procedimiento guardarOtrosDNI()
+    Mientras vC <> "." hacer
+        Avz(secCompras , vC)
+    fm
+
+    Avz(secCompras , vC)
+    guardarDni()
+fp
+
+Procedimiento DatosSalida()
+    avzHastaNombre()
+    guardarNombre()
+    Avz(nombre , secSalida)
+    Avz("+" ,  secSalida)
+    guardarDni()
+    
+fp
+Procedimiento avzHastaPago()
+   
+    Mientras NDFS(secFila_virtual) hacer
+        Repetir
+            Avz(secFila_virtual , vF)
+            i := i +1
+        Hasta i = 11 
+    fm
+    
+fp
+
+
+
+Funcion mapeo(c : caracter) r: numerico
+    Segun c hacer
+        "1" : 1
+        ...
+        "5" : 5
+    fs
+
+    cantidadVirtual := c
+fp
+
+Procedimiento entradasVirtual()
+    Avz(secFila_virtual , vF)
+    Repetir
+        Avz(vF , cantidad)
+    Hasta vF = #
+
+    mapeo(cantidad)
+fp
+
+Procedimiento contarCompra()
+    avzHastaNombre()
+    Repetir
+        Avz(secCompras , vC)
+    Hasta vC = "+" //avazno hasta el nombre de la primer entrada
+    
+    Repetir 
+        contadorEntrada := contadorEntrada + 1
+        avzHastaPunto()
+        Avz(secCompras , vC)
+    Hasta vC = "?"
+
+
+fp
+
+Procedimiento avzHastaPunto()
+    Repetir
+        Avz(secCompras , vC)
+    Hasta v = "."
+fp
+
+Algoritmo
+
+Crear(secSalida)
+
+Arr(secFila_virtual) ; Avz(secFila_virtual , vF)
+
+Arr(secCompras) ; Avz(secCompras , vC)
+
+Mientras NFDS(secCompras) hacer
+
+    //Act A
+    avzHastaPago()
+    Si vF  = "T" entonces
+        Repetir
+            DatosSalida()
+        Hasta vC = "?"
+    Sino
+        contarCompra()
+    fs
+
+    Si cantidadVirtual <> contadorEntrada entonces
+        declaracionDistinta := declaracionDistinta + 1 
+    fs
+
+fm
+
+Esc("La cantidad de usuarios compraron una cantidad de entradas") 
+Esc("distinta a la que declararon en la fila virtual es", declaracionDistinta .)
+fa
+
+
+

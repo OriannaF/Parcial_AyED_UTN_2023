@@ -1,0 +1,79 @@
+Accion Ejercicio2 es
+Ambiente
+
+    //archivo de entrada
+    stock = registro
+        codSuc: N(2)
+        Rubro: AN(20)
+        codArticulo: N(5) 
+        fechaUltRep: N(8)
+        stockDeSeguridad:N(8)
+        stockActual:N(8)
+    fr
+
+    arch : archivo de stock
+    reg: stock
+
+    //archivo de salida
+    stockSalida = registro
+        sucuSal: N(2)
+        rubroSal: AN(20)
+        cantSal: N(2)
+    fr
+
+    arch2: archivo de stockSalida
+    reg2: stockSalida
+
+    //resguardos
+    resgRubro: AN(20)
+    resgSucursal: N(2)
+
+    //cortes
+    Procedimiento corteRubro()
+        resgRubro :=  regRubro
+        Si stockActual < stockDeSeguridad entonces
+            cantStockAbajoSeguridad := cantStockAbajoSeguridad + 1
+            cantStockAbajoSeguridad2 := cantStockAbajoSeguridad2 + cantStockAbajoSeguridad
+            Esc("En la sucursal " reg.sucursal " rubro " reg.rubro " el artículo" reg.codArticulo "está por debajo del stock de seguridad")
+            Esc("La cantidad de art. por debajo de stock de seguridad en el rubro", reg.rubro "es de", cantStockAbajoSeguridad)
+            archivoSalida()
+            Esc(cantStockAbajoSeguridad, reg2.cantSal) //escribo cantidad en el registro de salida
+            cantStockAbajoSeguridad:= 0
+        fs
+    fp
+
+    Procedimiento corteSucursal()
+        resgSucursal :=  regSucursal
+        Si stockActual < stockDeSeguridad entonces
+            cantStockAbajoSeguridad := cantStockAbajoSeguridad + 1
+            cantStockAbajoSeguridad2 := cantStockAbajoSeguridad2 + cantStockAbajoSeguridad
+            Esc("En la sucursal " reg.sucursal " rubro " reg.rubro " el artículo" reg.codArticulo "está por debajo del stock de seguridad")
+            Esc("La cantidad de art. por debajo de stock de seguridad en la sucursal", reg.rubro "es de", cantStockAbajoSeguridad)
+            cantGeneral := cantStockAbajoSeguridad2 + cantGeneral
+            archivoSalida()
+            Esc(cantStockAbajoSeguridad2, reg2.cantSal)  //escribo cantidad en el registro de salida
+            cantStockAbajoSeguridad2:= 0
+            
+        fs
+    fp
+
+    //para guardar en la salida
+    Procedimiento archivoSalida()
+        Esc(reg.sucursal , reg2.sucuSal)
+        Esc(reg.rubro, reg2.rubroSal)
+    fp
+
+Algoritmo
+
+    Mientras NFDA
+
+        Si resgSucursal <> reg.sucursal entonces
+            corteSucursal()
+        Sino
+            Si resgRubro <> reg.Rubro entonces
+                corteRubro()
+            fs
+        fs
+        Esc("El total general es: ", cantGeneral)
+    fm
+fa

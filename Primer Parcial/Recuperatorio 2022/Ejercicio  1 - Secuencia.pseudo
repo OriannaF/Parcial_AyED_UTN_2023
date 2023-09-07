@@ -1,0 +1,176 @@
+
+// sec: codprotocolo(5)apellidonombre,cantidaddeestudios(2)codigosdecadauno
+// ej : E3456OriannaFernandez,02A234E234*
+
+// a) Si cod estudio tipo A y cantidad mayor a 2, entonces guardo el estudio
+
+// b) hacer total recaudado (depende del tipo de estudio)
+// Hago el contador del tipo para act c) y a lo último multiplico por el costo
+
+// c) promedio de estudio por paciente
+// contar los pacientes, sumar total de estudios y dividir por los pacientes
+
+
+Accion Ejercicio1 es
+Ambiente
+
+    sec: secuencia de caracter
+    v: caracter
+
+    //Para pasar cantidad a numérico
+    dig1, dig2, cantidadEstudios : numerico
+
+    //contadores de tipo de estudio
+    contadorA, contadorE, contadorI : numerico
+
+    //contadores act c)
+    contadorPaciente , contadorPacienteTotal, cantidadEstudiosTotal, promedioEstudiosPaciente : numerico
+
+    //otros
+    i : numerico
+
+    // Avanzo hasta cantidad de estudios para evaluar act a)
+
+    Procedimiento avzHastaCantidad() es
+        Ambiente
+            i: numerico
+        Algoritmo
+            i:= 0
+
+            //Avanzo el código
+            Para i=0 hasta i=4 hacer
+                Avz(sec, v)
+                i:= i + 1 
+            fp
+
+            //Avanzo el nombre
+            Mientras v <> "," hacer
+                Avz(sec, v)
+            fm
+
+            //Estoy en el primer caracter de cantidad
+            Avz(sec, v)
+        fa
+    fp
+
+    Procedimiento Cantidad() es
+        Algoritmo
+            dig1 := caracterToEntero(v) //Convierto a numérico el primer dígito de cantidad
+            dig1 * 10
+
+            //Avanzo para estar en dígito 2
+            dig2 := caracterToEntero(v) //Convierto a numérico el segundo dígito de cantidad
+
+            //Saco cantidad de estudios
+            cantidadEstudios := dig1 + dig2
+        fa
+    fp
+
+    Procedimiento contarTipo() es
+        Algoritmo
+            Segun v hacer
+                "A" : contadorA := contadorA + 1
+                "E" : contadorE := contadorE + 1
+                "I" : contadorI := contadorI + 1
+            fs
+        fa
+    fp
+
+    //Para convertir
+    Función caracterToEntero (d:caracter): entero
+        Según d hacer
+            '0': caracter:= 0
+            '1': caracter:= 1
+            '2': caracter:= 2
+            '3': caracter:= 3
+            '4': caracter:= 4
+            '5': caracter:= 5
+            '6': caracter:= 6
+            '7': caracter:= 7
+            '8': caracter:= 8
+            '9': caracter:= 9
+        Fs
+    Ff
+
+
+Algoritmo
+    Arr(sec) ; Avz(sec,v)
+    Crear(sec2) 
+
+    cantidadEstudiosTotal := 0
+    contadorPacienteTotal := 0
+    
+
+    Mientras v <> "*" hacer 
+
+        i:= 0
+
+        //contadores tipo de estudio (actividad b)
+        contadorA := 0 ; contadorE := 0 ; contadorI := 0
+
+        // contadores act c)
+        contadorPaciente := 0
+        cantidadEstudios := 0
+
+
+        //Avanzo hasta estudios
+        avzHastaCantidad()
+
+        //Saco cantidad de estudios
+        Cantidad()
+
+        Avz(sec,v) //Estoy en el tipo del primer estudio
+
+        Si cantidadEstudio > 2 entonces
+
+            Para i:= 0 hasta cantidadEstudios hacer
+
+                //act a)
+                Si v = A entonces 
+
+                    //para actividad b) 
+                    contadorA := contadorA + 1 
+
+                    //para escribir la letra y los num en salida
+                    Escribir(v, sec2)
+                    Avz(sec, v) ; Escribir(v, sec2)
+                    Avz(sec, v) ; Escribir(v, sec2)
+
+                Sino
+                    contarTipo() //Cuento el tipo de estudio
+                    Avz(sec, v) ; Avz(sec, v) ; Avz(sec, v) //Avz hasta el otro estudio
+                fs
+
+                i := i + 1 
+            fp
+
+        Sino
+
+            Para i:= 0 hasta  i:= cantidadEstudios hacer
+                contarTipo() //Cuento el tipo de estudio
+                Avz(sec, v) ; Avz(sec, v) ; Avz(sec, v) //Avz hasta el otro estudio
+                i := i + 1 
+            fs
+        fs
+
+        //act b
+       totalRecaudadoTemp := ( contadorA * 300 ) + ( contadorE * 420 ) + ( contadorI * 670 )
+       totalRecaudado := totalRecaudado + totalRecaudadoTemp 
+       totalRecaudadoTemp := 0
+
+        //act c
+        cantidadEstudiosTotal := cantidadEstudiosTotal + cantidadEstudio
+        contadorPaciente := contadorPaciente + 1
+        contadorPacienteTotal := contadorPacienteTotal + contadorPaciente
+
+    fm
+
+    //act c)
+
+    promedioEstudiosPaciente :=  (cantidadEstudiosTotal) / (contadorPacienteTotal)
+
+    //act b
+    Esc("El total recaudado de hoy es de ", totalRecaudado)
+
+    Cerrar(sec)
+fa

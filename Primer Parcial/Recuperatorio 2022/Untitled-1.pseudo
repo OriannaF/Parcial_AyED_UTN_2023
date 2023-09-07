@@ -1,0 +1,18 @@
+// act 1
+
+
+
+Accion Ejercicio2 es
+Ambiente
+    Servicio = registro
+        sucursal : N(4)
+        area : N(1)
+        idServ : N(6)
+        desc : AN(45)
+        cant_cli : N(4)
+        monto : N(6.2)
+    fr
+
+
+Algoritmo
+fa
