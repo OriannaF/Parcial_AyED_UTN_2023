@@ -73,7 +73,7 @@ Accion Ej2 es
         Mientras NFA(archViajes) hacer
             Para i = 1 hasta 24 hacer
                 Si A[i,j,k] = regViajes.ProvinciaDestino entonces
-                    j:= regViajes.ProvinciaDestino //fecha
+                    j:= regViajes.fecha //fecha
                     A[i,j,1] := A[i,j,1] + 1 //1 es cantidad de viajes
                     A[i,j,2] := regViajes.MontoCredito //2 es cantidad de crédito
                 fs
