@@ -1,0 +1,148 @@
+Accion Ej2 es
+    Ambiente
+        
+        fecha = registro
+            D: 1...31
+            M: 1..12
+            A: N(4)
+        fr 
+    
+        Viajes = registro
+            DNI: N(8)
+            Fecha: fecha
+            ProvinciaDestino: N(2)
+            MontoCredito: N(10)
+        fr
+
+        archViajes: archivo de viajes ordenado por DNI
+        regViajes: Viajes
+
+        A: arreglo [1...24,1...13,1..2] de entero //prov, mes, cant viajes y crédito
+        
+        i , j , k : entero
+
+        mayorMontoProvincia, mayorMontoMes, mesMayorMonto: N(10)
+        destinoMayorTurista : N(10)
+        promedioCredito : N(10)
+        
+    
+        Procedimiento CeroMatriz() es
+            Para k = 1 hasta 2 hacer
+                Para j = 1 hasta 13 hacer
+                    Para i = 1 hasta 24 hacer
+                        A[i,j,k] := 0
+                    fp
+                fp
+            fp
+        fp
+
+        Procedimiento CeroAcum() es
+            mayorMontoProv := 0
+            mayorMontoMes := 0
+            destinoMasTuristas := 0
+            promedioCredito := 0
+        fp
+
+        Procedimiento MayorCreditoXMes()
+            Si mayorMontoMes < montoActualMes entonces
+                mayorMontoMes := montoActualMes
+                mesMayorMonto := j
+            Fs
+        fp
+
+        Procedimiento MayorCreditoXProv()
+            Si mayorMontoProvincia < montoActualProv entonces
+                mayorMontoProv := montoActual
+                provMayorMonto := i
+            Fs
+        fp
+
+        Procedimiento MayorTurista()
+            Si mayorTurista < turistaActual entonces
+                mayorTurista := turistaActual
+                destinoMayorTurista := i
+            Fs
+        fp
+
+    Algoritmo
+
+        Abrir E/ (archViajes) ; Leer(archViajes,regViajes)
+
+        CeroMatriz() ; CeroAcum()
+
+        Mientras NFA(archViajes) hacer
+            Para i = 1 hasta 24 hacer
+                Si A[i,j,k] = regViajes.ProvinciaDestino entonces
+                    j:= regViajes.ProvinciaDestino //fecha
+                    A[i,j,1] := A[i,j,1] + 1 //1 es cantidad de viajes
+                    A[i,j,2] := regViajes.MontoCredito //2 es cantidad de crédito
+                fs
+                Leer(archViajes, regViajes)
+            fp
+        fm
+
+        mayorMontoMes := A[24,1,2]
+        mayorMontoProvincia := A[1,13,2]
+        mayorTurista :=  A[1, 13, 1]
+
+        //totales y mayores
+        Para k = 1 hasta 2 hacer
+            Para j = 1 hasta 13 hacer
+                Para i = 1 hasta 24 hacer
+
+                    //me posiciono en el valor de cantidad de viajes y crédito
+                    cantidadViajes := A[i, j, 1] 
+                    montoCredito := A[i, j, 2]
+
+                    //totales de provincia
+                    A[i, 13, 1] := A[i, 13, 1] + cantidadViajes 
+                    A[i, 13, 2] := A[i, 13, 2] + montoCredito
+
+                    //totales por mes
+                    A[24, j, 1] := A[24, j, 1] + cantidadViajes 
+                    A[24, j, 2] := A[24, j, 2] + montoCredito
+
+                    //guardo actuales
+                    turistaActual :=  A[i, 13, 1]
+                    montoActualProv :=  A[i, 13, 2]
+                    montoActualMes := A[24, j, 2]
+
+                    //encontrar mayores
+                    MayorCreditoXMes() ; MayorCreditoXProv()
+                    MayorTurista()
+                fp
+            fp
+        fp
+
+        //promedio de crédito por provincia
+        Para i = 1 hasta 24 hacer
+            Esc("En la provincia", i ," se tiene un promedio de ", ( A[i, 13, 2] )/(12) " ." )
+        fp
+
+        //mostrar totales de crédito por provincia
+        Para i = 1 hasta 24 hacer
+            Esc("En la provincia ", i ,"hay un total de ", A[i, 13, 2] , "crédito")
+        fp
+
+        //mostrar totales de crédito por mes
+        Para j = 1 hasta 13 hacer
+            Esc("En el mes ", i ,"hay un total de ", A[24, j, 2] , "crédito")
+        fp
+
+        //mostrar totales de viajes por provincia
+        Para i = 1 hasta 24 hacer
+            Esc("En la provincia ", i ,"hay un total de ", A[i, 13, 1] , "viajes")
+        fp
+
+        //mostrar totales de viajes por mes
+        Para j = 1 hasta 13 hacer
+            Esc("En el mes ", i ,"hay un total de ", A[24, j, 1] , "viajes")
+        fp
+
+        //mostrar mayores
+        Esc("El mes con mayor monto es", mesMayorMonto ,"con" mayorMontoMes, "de crédito")
+        Esc("La provincia con mayor monto es", provMayorMonto ,"con" mayorMontoProvincia, "de crédito")
+        Esc("La provincia con la mayor cantidad de turistas es ", destinoMayorTurista ,"con" ,mayorTurista, "turistas" )
+
+    fa
+fa
